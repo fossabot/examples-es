@@ -1,0 +1,21 @@
+{
+  "workspaces": [
+    "./consumer-node",
+    "./intermediary",
+    "./consumer-bundler",
+    "./consumer-esbuild",
+    "./consumer-webpack",
+    "./consumer-rollup",
+    "./consumer-vite",
+    "./consumer-vite-ts",
+    "./consumer-ts",
+    "./consumer-parcel"
+  ],
+  "//": "parcel adds the dep on process",
+  "@parcel/resolver-default": {
+    "packageExports": true
+  },
+  "devDependencies": {
+    "process": "^0.11.10"
+  }
+}

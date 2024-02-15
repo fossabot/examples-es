@@ -12,47 +12,44 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Code, ConnectError, ConnectRouter } from '@connectrpc/connect'
-import { ElizaService } from './gen/connectrpc/eliza/v1/eliza_connect.js'
-import type {
-  SayRequest,
-  IntroduceRequest,
-  ConverseRequest,
-} from './gen/connectrpc/eliza/v1/eliza_pb.js'
+const { Code, ConnectError } = require("@connectrpc/connect");
+const { ElizaService } = require("./gen/connectrpc/eliza/v1/eliza_connect.js");
 
-export { ElizaService };
-
-export const routes = (router: ConnectRouter) =>
+const routes = (router) =>
   router.service(ElizaService, {
-    say(req: SayRequest) {
-      if (req.sentence.includes('fail')) {
-        throw new ConnectError('Failure specified', Code.InvalidArgument)
+    say(req) {
+      if (req.sentence.includes("fail")) {
+        throw new ConnectError("Failure specified", Code.InvalidArgument);
       }
 
       return {
         sentence: `You said ${req.sentence}`,
-      }
+      };
     },
-    async *introduce(req: IntroduceRequest) {
-      yield { sentence: `Hi ${req.name}, I'm Eliza` }
-      await delay(250)
+    async *introduce(req) {
+      yield { sentence: `Hi ${req.name}, I'm Eliza` };
+      await delay(250);
       yield {
         sentence: `Before we begin, ${req.name}, let me tell you something about myself.`,
-      }
-      await delay(250)
-      yield { sentence: `I'm a Rogerian psychotherapist.` }
-      await delay(250)
-      yield { sentence: `How are you feeling today?` }
+      };
+      await delay(250);
+      yield { sentence: `I'm a Rogerian psychotherapist.` };
+      await delay(250);
+      yield { sentence: `How are you feeling today?` };
     },
-    async *converse(reqs: AsyncIterable<ConverseRequest>) {
+    async *converse(reqs) {
       for await (const req of reqs) {
         yield {
           sentence: `You said ${req.sentence}`,
-        }
+        };
       }
     },
-  })
+  });
 
-function delay(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms))
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
+module.exports = {
+  ElizaService,
+  routes,
+};
